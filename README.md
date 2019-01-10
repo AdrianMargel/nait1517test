@@ -2,4 +2,4 @@
 test repo for class
 
 this is some example text
-more changes!
+more changes! (x2)
