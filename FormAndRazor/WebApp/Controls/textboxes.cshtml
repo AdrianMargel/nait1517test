@@ -22,18 +22,58 @@
 }
 
 <!-- content body-->
-    <form id="theform" action="#" method="post">
+@if (IsPost)
+{
+    if (thebutton.Equals("reset"))
+    {
+        leftside = "";
+        rightside = "";
+    }
+    else
+    {
+        if (string.IsNullOrEmpty(leftside) || string.IsNullOrEmpty(rightside))
+        {
+            <p>Must enter data in both fields</p>
+        }
+        else
+        {
+            if (thebutton.Equals("leftinput"))
+            {
+            <p>your name is @leftside</p>
+            }
+            else
+            {
+            <p>@leftside, your color is @rightside</p>
+            }
+        }
+    }
+}
+else
+{
+    <p>this form is in initialization</p>
+}
+
+<form id="theform" action="#" method="post">
+    <div class="row">
         <div class="col-md-6">
             <label for="leftinput">Your Name:</label>
-            <input type="text" id="leftinput" name="leftinput" placeholder="Bob Smith" value="@leftside"/>
+            <input type="text" id="leftinput" name="leftinput" placeholder="Bob Smith" value="@leftside" />
             <button type="submit" id="formbutton" name="formbutton" class="btn" value="leftinput">Press Left</button>
         </div>
         <div class="col-md-6">
             <label for="rightinput">Your Favourite Color:</label>
-            <input type="text" id="rightinput" name="rightinput" placeholder="rainbow" value="@rightside"/>
+            <input type="text" id="rightinput" name="rightinput" placeholder="rainbow" value="@rightside" />
             <button type="submit" id="formbutton" name="formbutton" class="btn" value="rightinput">Press Right</button>
         </div>
-    </form>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-5">
+            <button type="submit" id="formbutton" name="formbutton" class="btn" value="reset">
+                reset
+            </button>
+        </div>
+    </div>
+</form>
 
 <p>Hello World</p>
 
