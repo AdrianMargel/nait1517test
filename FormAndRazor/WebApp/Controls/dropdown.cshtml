@@ -1,6 +1,7 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
     Page.Title = "dropdown";
+    var selection = Request.Form["pageselection"];
 
 }
 
@@ -12,12 +13,49 @@
 
 @section banner
 {
-    <h1>dropw down (select) sample for razor</h1>
+    <h1>drop down (select) sample for razor</h1>
 }
-
-<p>Hello World</p>
-
-@section footer
+@if (IsPost)
+{
+    switch (selection.ToUpper())
+    {
+        case "TEXTBOXES":
+            //object class for data going out is response
+            //the method to redirect to another page is .Redirect(page)
+            //we will use relative addressing
+            Response.Redirect("textboxes.cshtml");
+            break;
+        case "RADIOBUTTONS":
+            Response.Redirect("radiobuttons.cshtml");
+            break;
+        case "CHECKBOXES":
+            Response.Redirect("checkboxes.cshtml");
+            break;
+        default:
+                <p><span style="color:firebrick">Select a valid option</span></p>
+                break;
+        }
+    }
+    <form id="theform" method="post">
+        <div class="row">
+            <div class="col-md-offset-4">
+                <label for="pageselection">Select control example</label>
+                &nbsp;&nbsp;
+                <select if="pageselection" name="pageselection">
+                    <option value="">select ...</option>
+                    <option value="textboxes">text boxes</option>
+                    <option value="radiobuttons">radio buttons</option>
+                    <option value="checkboxes">check boxes</option>
+                </select>
+                &nbsp;&nbsp;
+                <button type="submit" id="formbutton" name="formbutton"
+                        value="submit" class="btn btn-primary">
+                    Go To ...
+                </button>
+            </div>
+        </div>
+    </form>
+    @section footer
 {
     &copy; CPSC1517 NAIT, all rights reserved
-}
+    }

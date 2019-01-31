@@ -1,6 +1,8 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
     Page.Title = "checkboxes";
+    //any var that is needed on the form should be declared up at the page level
+    var games = "";
 
 }
 
@@ -14,8 +16,84 @@
 {
     <h1>checkboxes sample for razor</h1>
 }
+@if (IsPost)
+{
+    //in this example, we are delaying the capture of the incoming data until there has been a postback
+    var thebutton = Request.Form["formbutton"];
+    //keep in mind when you request the games value it can become null
+    games = Request.Form["gamegroup"];
 
-<p>Hello World</p>
+    if (thebutton.Equals("Clear"))
+    {
+        games = "";
+    }
+    else
+    {
+        //press Submit
+        //validation
+        if (string.IsNullOrEmpty(games))
+        {
+            games = "";
+            <p>
+                <span style="color:firebrick">
+                    <strong>I see you don't like games</strong>
+                </span>
+            </p>
+        }
+        else
+        {
+            //the checkbx group comes in as a coma seperated value (CSV) string
+            //we turn the CSV into an array using .Split(delimiter) where ',' is the delimiter
+
+            <p>
+                I see you like playing on the following platforms:
+                <ul>
+                    @foreach (var platform in games.Split(',')) {
+                        <li>@platform</li>
+                    }
+                </ul>
+            </p>
+
+        }
+
+    }
+}
+    <form id="theform" method="post">
+        <div class="col-md-offset-2">
+            <label for="gamegroup">
+                Choose your favourite gaming platform
+            </label><br />
+            <input type="checkbox" id="gamegroup" name="gamegroup"
+                   value="PS4"
+                   @(Array.IndexOf(games.Split(','),"PS4")!=-1?"checked":"") />&nbsp;&nbsp; Play Station 4<br />
+
+            <input type="checkbox" id="gamegroup" name="gamegroup"
+                   value="PC"
+                   @(Array.IndexOf(games.Split(','),"PC")!=-1?"checked":"") />&nbsp;&nbsp; Computer<br />
+
+            <input type="checkbox" id="gamegroup" name="gamegroup"
+                   value="Switch"
+                   @(Array.IndexOf(games.Split(','),"Switch")!=-1?"checked":"") />&nbsp;&nbsp; Switch<br />
+
+            <input type="checkbox" id="gamegroup" name="gamegroup"
+                   value="Phone"
+                   @(Array.IndexOf(games.Split(','),"Phone")!=-1?"checked":"") />&nbsp;&nbsp; Cell Phone<br />
+
+            <input type="checkbox" id="gamegroup" name="gamegroup"
+                   value="IPad"
+                   @(Array.IndexOf(games.Split(','),"IPad")!=-1?"checked":"") />&nbsp;&nbsp; IPad<br /><br />
+
+            <button type="submit" id="formbutton" name="formbutton"
+                    value="submit" class="btn btn-primary">
+                Submit
+            </button>
+            &nbsp;&nbsp;
+            <button type="submit" id="formbutton" name="formbutton"
+                    value="Clear" class="btn">
+                Reset
+            </button>
+        </div>
+    </form>
 
 @section footer
 {
