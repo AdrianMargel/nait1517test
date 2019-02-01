@@ -1,0 +1,59 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    var searcharg = Request.Form["searcharg"];
+    var regionid = "";
+    var description = "";
+
+    //first pass of page searh arg will be null but for the DB query it must be a number
+    if (string.IsNullOrEmpty(searcharg))
+    {
+        searcharg = "0";
+    }
+    //open connection to db
+    //use connection string name attribute value
+    var db = Database.Open("NWDB");
+    //create sql command to be executed
+    //place holder will be used for query argument
+    //query command can be coded on multiple physical lines
+    var querycommand = "SELECT RegionID, RegionDescription " +
+                "FROM Region " +
+                "WHERE RegionId = @0";
+    //execute the sql query against the database
+    //.QuerySingle() used when expecting a single record returned
+    //.Query() used when expecting 0,1, or more records returned
+    //.QueryValue() used when expecting a single value (not record) returned
+    var results = db.QuerySingle(querycommand, searcharg);
+}
+
+
+@section head
+{
+
+    <link href="~/Content/MyCustomStyles.css" rel="stylesheet" />
+}
+
+@section banner
+{
+    <h1>Database:Single query</h1>
+}
+
+<form id="theform" method="post">
+    <div class="row">
+        <div class="col-md-4">
+            <label for="searcharg">Enter Region ID:</label>
+            <input type="text" id="searcharg" name="searcharg" placeholder="region id" value="@searcharg" />
+            <br/>
+            <button type="submit" id="formbutton" name="formbutton" class="btn btn-primary" value="search">search</button>
+            &nbsp;&nbsp;
+            <button type="submit" id="formbutton" name="formbutton" class="btn" value="clear">clear</button>
+        </div>
+        <div class="col-md-8">
+            <label for="regionid">Region ID:</label>
+            <input type="text" id="regionid" name="regionid" value="@regionid" />
+            <br />
+            <label for="description">Region Name:</label>
+            <input type="text" id="description" name="description" value="@description" />
+            <br />
+        </div>
+    </div>
+</form>
