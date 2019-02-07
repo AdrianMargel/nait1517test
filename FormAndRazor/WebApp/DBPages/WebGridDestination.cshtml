@@ -1,0 +1,23 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "MultiRecord Query";
+
+    var pid = Request.QueryString["pid"];
+
+}
+
+@section banner{
+    <h1>DataBase: MultiRecord Query</h1>
+}
+
+<p>you passed the data value @pid</p>
+
+@section head{
+
+    <link href="~/Content/MyCustomStyles.css" rel="stylesheet" />
+}
+
+@section footer{
+    &copy; CPSC1517 Nait 2019, all rights reserved
+}
+
