@@ -26,6 +26,26 @@
                     + "FROM Suppliers "
                     + "ORDER BY companyName";
     var supResults = db.Query(supcommand);
+    //coding of validation controls
+    //validation controls are run on the server side
+    //there is one validation control per input control
+    //validation controls consist of validators
+    //there can be multiple validators inside the validation control
+    //validation controls are linked to the input control via the control name
+    //structure of a validator is dependent on the validation of that validater
+    //Validator do not execute unless there is data present except for .Required
+    Validation.Add("ProductName", Validator.Required("product name is required"), Validator.StringLength(40, 1, "product name is limited to  40 characters"));
+    Validation.Add("QuantityPerUnit", Validator.StringLength(20, 0, "quantity per unit is limited to 20 characters"));
+    Validation.Add("UnitPrice", Validator.Range(0.00,Double.MaxValue,"unit price cannot be negative"));
+    Validation.Add("UnitsInStock", Validator.Integer("must be a whole number"),Validator.Range(0.00, 32767, "must be 0 to 32767"));
+    Validation.Add("UnitsOnOrder", Validator.Integer("must be a whole number"), Validator.Range(0.00, 32767, "must be 0 to 32767"));
+    Validation.Add("ReorderLevel", Validator.Integer("must be a whole number"), Validator.Range(0.00, 32767, "must be 0 to 32767"));
+
+    //field matching
+    //Validation.Add("PasswordTest", Validator.Required("password required"), Validator.EqualsTo("ConfirmPassword","password was not the same"))
+    //Validation.Add("PostalCode", Validator.Required("pc required"), Validator.Regex("[A-Za-z][0-9][A-Za-z][0-9][[A-Za-z][0-9][","invalid postal code"))
+
+
 }
 @section head{
     <link href="~/Content/MyCustomStyles.css" rel="stylesheet" />
@@ -52,6 +72,7 @@
     {
         <p class="col-sm-11 text-center">Cleared by user.</p>
         discontinued = "";
+
     }
     else
     {
@@ -66,44 +87,47 @@
         reorderlevel = Request.Form["ReorderLevel"];
         discontinued = Request.Form["Discontinued"];
 
-        //process incoming data
-        //user friendly error handling
-
-        try
+        //validation occurs against data that will be sent for processing against your database
+        if (Validation.IsValid())
         {
+            //process incoming data
+            //user friendly error handling
 
-            //connect to db
-            //var db = Database.Open("NWDB");
+            try
+            {
 
-            //create sql insert command
-            //note the number and position of placeholders for each supplied field
+                //connect to db
+                //var db = Database.Open("NWDB");
 
-            var insertcommand = "INSERT INTO PRODUCTS (productName, supplierId, categoryId, quantityPerUnit, " +
-                            "unitPrice, unitsInStock, unitsOnOrder, reorderLevel, discontinued) " +
-                            "VALUES(@0, @1, @2, @3, @4, @5, @6, @7, @8)";
+                //create sql insert command
+                //note the number and position of placeholders for each supplied field
 
-            //code sql command here
+                var insertcommand = "INSERT INTO PRODUCTS (productName, supplierId, categoryId, quantityPerUnit, " +
+                                "unitPrice, unitsInStock, unitsOnOrder, reorderLevel, discontinued) " +
+                                "VALUES(@0, @1, @2, @3, @4, @5, @6, @7, @8)";
 
-            //execute the insert command
-            //the method used is the .Execute(command string, list of placeholder variables)
-            //ternary operator used for nullable fields
+                //code sql command here
 
-            db.Execute(insertcommand, productname,
-                selectedsupplier.Equals("0") ? null : selectedsupplier,
-                selectedcategory.Equals("0") ? null : selectedcategory,
-                String.IsNullOrEmpty(quantityperunit) ? null : quantityperunit,
-                String.IsNullOrEmpty(unitprice) ? null : unitprice,
-                String.IsNullOrEmpty(unitsinstock) ? null : unitsinstock,
-                String.IsNullOrEmpty(unitsonorder) ? null : unitsonorder,
-                String.IsNullOrEmpty(reorderlevel) ? null : reorderlevel,
-                0);
-            //discontinued is given a value of 0 since a new product by definition cannot start as discontinued
+                //execute the insert command
+                //the method used is the .Execute(command string, list of placeholder variables)
+                //ternary operator used for nullable fields
 
-            //code execution statement here
+                db.Execute(insertcommand, productname,
+                    selectedsupplier.Equals("0") ? null : selectedsupplier,
+                    selectedcategory.Equals("0") ? null : selectedcategory,
+                    String.IsNullOrEmpty(quantityperunit) ? null : quantityperunit,
+                    String.IsNullOrEmpty(unitprice) ? null : unitprice,
+                    String.IsNullOrEmpty(unitsinstock) ? null : unitsinstock,
+                    String.IsNullOrEmpty(unitsonorder) ? null : unitsonorder,
+                    String.IsNullOrEmpty(reorderlevel) ? null : reorderlevel,
+                    0);
+                //discontinued is given a value of 0 since a new product by definition cannot start as discontinued
+
+                //code execution statement here
 
 
-            //use of bootstrap text positioning
-            //success message
+                //use of bootstrap text positioning
+                //success message
             <p class="col-sm-11 text-center">
                 <span style="color:green">
                     <strong>
@@ -111,9 +135,9 @@
                     </strong>
                 </span>
             </p>
-        }
-        catch (Exception ex)
-        {
+            }
+            catch (Exception ex)
+            {
             <p class="col-sm-11 text-center">
                 <span style="color:firebrick">
                     <strong>
@@ -121,10 +145,21 @@
                     </strong>
                 </span>
             </p>
+            }
         }
     }
 }
 
+@* There are two ways to display your validation error messages
+    a. using .ValidationSummery()
+        -messages are displayed as a buffered list
+        -all error messages for the control are displayed
+    b. using  .ValidationMessage("controlname")
+        -messages are displayed where the message display control is phyisically positioned
+        -only the first error message is displayed
+        -must be used on each validation control independantly
+*@
+@Html.ValidationSummary()
 <form id="theForm" action="" method="post">
     <div class="row ">
         <div class="col-sm-5 text-right">
@@ -141,7 +176,9 @@
         <div class="col-sm-5">
             <!-- the title attribute creates the tooltip for the control-->
             <input name="ProductName" id="ProductName" type="text" value="@productname"
-                   title="Product Name." /><br />
+                   title="Product Name." />
+            @*Html.ValidationMessage("")*@
+            <br />
             <select id="SupplierID" name="SupplierID">
                 <option value="0">select ...</option>
                 <!--  loop code here-->
@@ -182,6 +219,16 @@
             </select><br />
             <input name="QuantityPerUnit" id="QuantityPerUnit" type="text"
                    value="@quantityperunit" /><br />
+            <input name="UnitPrice" id="UnitPrice" type="text" value="@unitprice"
+                   /><br />
+            <input name="UnitsInStock" id="UnitsInStock" type="text" value="@unitsinstock"
+                   title="Quantity on Hand." /><br />
+            <input name="UnitsOnOrder" id="UnitsOnOrder" type="text" value="@unitsonorder"
+                   title="Quantity on Order." /><br />
+            <input name="ReorderLevel" id="ReorderLevel" type="text" value="@reorderlevel"
+                   title="Reorder Level." /><br />
+            @* HTML5 client side validation
+                
             <input name="UnitPrice" id="UnitPrice" type="number" value="@unitprice"
                    step="0.01" min="0.00" /><br />
             <input name="UnitsInStock" id="UnitsInStock" type="number" value="@unitsinstock"
@@ -189,7 +236,7 @@
             <input name="UnitsOnOrder" id="UnitsOnOrder" type="text" value="@unitsonorder"
                    step="1" min="0" title="Quantity on Order." /><br />
             <input name="ReorderLevel" id="ReorderLevel" type="text" value="@reorderlevel"
-                   step="1" min="0" title="Reorder Level." /><br />
+                   step="1" min="0" title="Reorder Level." /><br />*@
             <input name="Discontinued" id="Discontinued" type="checkbox"
                    title="Product is discontinued if checked."
                    @(string.IsNullOrEmpty(discontinued) ? "" : "checked") /><br /><br />
@@ -201,8 +248,9 @@
                     class="btn btn-primary" style="width:90px">
                 Add
             </button>&nbsp;&nbsp;
+            @* formnovalid turns off the client side validation*@
             <button type="submit" name="formButton" value="reset"
-                    class="btn " style="width:90px">
+                    class="btn " style="width:90px" formnovalidate>
                 Clear
             </button>
         </div>
