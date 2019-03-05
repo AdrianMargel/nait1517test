@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace WebApp.SamplePages
 {
-    public partial class FirstPage : System.Web.UI.Page
+    public partial class HelloWorld : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -22,7 +22,7 @@ namespace WebApp.SamplePages
 
         protected void PressMe_Click(object sender, EventArgs e)
         {
-            OutputMessage.Text= "hello"+yourname.Text;
+            OutputMessage.Text= "hello "+yourname.Text;
         }
     }
 }
