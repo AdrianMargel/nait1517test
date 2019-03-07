@@ -5,7 +5,7 @@
         <tr>
             <td align="right">Enter your choice (1-4):</td>
             <td>
-                <asp:TextBox ID="TextBoxNymericChoice" runat="server"></asp:TextBox>
+                <asp:TextBox ID="TextBoxNumericChoice" runat="server"></asp:TextBox>
                 &nbsp; &nbsp;
                 
                 <asp:Button ID="SubmitButton" runat="server" Text="Submit Choice" OnClick="SubmitButton_Click" />
@@ -20,8 +20,8 @@
                 <asp:RadioButtonList ID="RadioButtonListChoice" runat="server" RepeatDirection="Horizontal" RepeatLayout="Flow">
                     <asp:ListItem Value="1">COMP1008</asp:ListItem>
                     <asp:ListItem Value="2">CPSC1517</asp:ListItem>
-                    <asp:ListItem Value="3">DMIT2018</asp:ListItem>
                     <asp:ListItem Value="4">DMIT1508</asp:ListItem>
+                    <asp:ListItem Value="3">DMIT2018</asp:ListItem>
                 </asp:RadioButtonList>
             </td>
         </tr>
