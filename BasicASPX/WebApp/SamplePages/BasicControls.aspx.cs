@@ -114,5 +114,39 @@ namespace WebApp.SamplePages
                 //OutputMessage.Text = "you pressed the submit choice button";
             }
         }
+        protected void dropdownButton_Click(object sender, EventArgs e)
+        {
+            string submitChoice = CollectionList.SelectedValue;
+            //sample validation (this is incomplete and just for testing)
+            if (submitChoice.Equals("select..."))
+            {
+                OutputMessage.Text = "Chose an option";
+            }
+            else
+            {
+                TextBoxNumericChoice.Text = submitChoice;
+                //set the RadioButtonList using the entered data value
+                //property: .SelectedValue
+                RadioButtonListChoice.SelectedValue = submitChoice;
+
+                //set the checkbox to be on if the choice was a programming language
+                if (submitChoice.Equals("2") || submitChoice.Equals("3"))
+                {
+                    CheckBoxChoice.Checked = true;
+                }
+                else
+                {
+                    CheckBoxChoice.Checked = false;
+                }
+
+                //demonstrate the 3 different access techniques for a list
+                //output will be to a label (appearance will eb read only)
+                DisplayReadOnly.Text = CollectionList.SelectedItem.Text
+                    + " at index " + CollectionList.SelectedIndex
+                    + " has a value of " + CollectionList.SelectedValue;
+
+                //OutputMessage.Text = "you pressed the submit choice button";
+            }
+        }
     }
 }

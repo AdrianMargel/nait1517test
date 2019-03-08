@@ -48,6 +48,8 @@
             <td>
                 <asp:DropDownList ID="CollectionList" runat="server">
                 </asp:DropDownList>
+                &nbsp; &nbsp;
+                <asp:Button ID="dropdownButton" runat="server" Text="Submit Choice"  OnClick="dropdownButton_Click" />
             </td>
         </tr>
         <tr>
