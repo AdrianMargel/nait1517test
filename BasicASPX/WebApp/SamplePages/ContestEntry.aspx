@@ -17,6 +17,52 @@
         </div>
     </div>
   
+    <%--all validation controls in one area--%>
+    
+    <asp:RequiredFieldValidator ID="RequiredFieldFirstName" runat="server" ErrorMessage="first name is required" Display ="None"
+        SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="FirstName" ></asp:RequiredFieldValidator>
+
+    <asp:RequiredFieldValidator ID="RequiredFieldLastName" runat="server" ErrorMessage="last name is required" Display ="None"
+        SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="LastName" ></asp:RequiredFieldValidator>
+
+    <asp:RequiredFieldValidator ID="RequiredFieldStreet1" runat="server" ErrorMessage="street address 1 is required" Display ="None"
+        SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="StreetAddress1" ></asp:RequiredFieldValidator>
+
+    <asp:RequiredFieldValidator ID="RequiredFieldCity" runat="server" ErrorMessage="city is required" Display ="None"
+        SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="City" ></asp:RequiredFieldValidator>
+
+    <asp:RequiredFieldValidator ID="RequiredPostalCode" runat="server" ErrorMessage="postal code is required" Display ="None"
+        SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="PostalCode" ></asp:RequiredFieldValidator>
+
+    <asp:RequiredFieldValidator ID="RequiredFieldEmail" runat="server" ErrorMessage="email is required" Display ="None"
+        SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="EmailAddress" ></asp:RequiredFieldValidator>
+
+    <asp:RequiredFieldValidator ID="RequiredFieldCheckAnswer" runat="server" ErrorMessage="you must give an answer to the skill testing question" Display ="None"
+        SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="CheckAnswer" ></asp:RequiredFieldValidator>
+
+    <%--since we have no control to demonstrate a range on we will put a range on street2 instead--%>
+
+    <asp:RangeValidator ID="RangeStreet2" runat="server" ErrorMessage="street 2 must be 1 to 5" Display ="None"
+        SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="StreetAddress2"
+        MaximumValue ="5" MinimumValue="1"></asp:RangeValidator>
+
+    <asp:RegularExpressionValidator ID="RegularExpressionPostalCode" runat="server" ErrorMessage="postal code must be A#A#A#" Display ="None"
+        SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="PostalCode" ValidationExpression="[a-zA-z][0-9][a-zA-z][0-9][a-zA-z][0-9]">
+        </asp:RegularExpressionValidator>
+
+    <asp:CompareValidator ID="CompareEmail" runat="server" ErrorMessage="Invalid email" Display ="None"
+        SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="EmailAddress" Type="String" Operator="DataTypeCheck"></asp:CompareValidator>
+
+    <asp:CompareValidator ID="CompareCheckAnswer" runat="server" ErrorMessage="Incorrect answer to question" Display ="None"
+        SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="CheckAnswer" Type="Integer" Operator="Equal" ValueToCompare="15"></asp:CompareValidator>
+
+    <%--<asp:CompareValidator ID="CompareConfirmPassword" runat="server" ErrorMessage="Passwords don't match" Display ="None"
+        SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="ConfirmPassword" Type="String" Operator="Equal" ControlToCompare="Password"></asp:CompareValidator>--%>
+
+    <asp:ValidationSummary ID="ValidationSummary1" runat="server"
+        HeaderText="correct the following:"
+        CssClass="alert alert-danger"/>
+
     <div class="row">
         <div class ="col-md-6">
             <fieldset class="form-horizontal">
@@ -85,11 +131,12 @@
         <div class="col-md-6">   
             <div class="col-md-offset-2">
                 <p>
-                    <asp:Button ID="Submit" runat="server" Text="Submit" />&nbsp;&nbsp;
-                    <asp:Button ID="Clear" runat="server" Text="Clear" CausesValidation="true"  />
+                    <asp:Button ID="Submit" runat="server" CssClass="btn btn-primary" Text="Submit" OnClick="Submit_Click" />&nbsp;&nbsp;
+                    <asp:Button ID="Clear" runat="server" CssClass="btn" Text="Clear" CausesValidation="true" OnClick="Clear_Click"  />
                 </p>
                 <asp:Label ID="Message" runat="server" ></asp:Label><br />
-            
+                <hr style="width:5px" />
+                <asp:GridView ID="ContestEntryList" runat="server"></asp:GridView>
             </div>
         </div>
     </div>
